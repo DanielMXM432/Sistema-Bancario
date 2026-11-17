@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Banco Horizonte | Simulador bancario</title>
+  <link href="/vendor/fuente/index.css" rel="stylesheet">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+  <main class="portada">
+    <nav class="container py-4 d-flex justify-content-between align-items-center">
+      <a class="marca text-white fs-5" href="/"><span class="marca-logo"><i class="bi bi-sunrise"></i></span>
+        <span>Banco Horizonte<small>Simulador bancario</small></span></a>
+      <a class="btn btn-ambar btn-sm px-3" href="/login.html"><i class="bi bi-person-circle me-1"></i>Ingresar</a>
+    </nav>
+
+    <section class="container flex-grow-1 d-flex flex-column justify-content-center py-4">
+      <p class="text-uppercase fw-bold mb-2" style="letter-spacing:.12em;color:var(--bh-ambar);font-size:.8rem">Proyecto integrador</p>
+      <h1 class="mb-3">Tu banco, en tres módulos<br>que hablan el mismo idioma.</h1>
+      <p class="lead mb-5">Banca virtual, oficina administrativa y cajero automático trabajando sobre la misma base de datos MySQL:
+        lo que haces en uno se ve al instante en los otros.</p>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <a class="modulo-card" href="/login.html">
+            <div class="icono fondo-turquesa"><i class="bi bi-laptop"></i></div>
+            <h3>Banca virtual</h3>
+            <p>Consulta saldos y movimientos, transfiere a otras cuentas y administra tu perfil.</p>
+            <span class="ir">Ingresar como cliente <i class="bi bi-arrow-right"></i></span>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a class="modulo-card" href="/cajero.html">
+            <div class="icono fondo-ambar"><i class="bi bi-cash-coin"></i></div>
+            <h3>Cajero automático</h3>
+            <p>Identifícate con tu número de cuenta y PIN para consultar saldo y retirar efectivo.</p>
+            <span class="ir">Usar el cajero <i class="bi bi-arrow-right"></i></span>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a class="modulo-card" href="/login.html?modo=admin">
+            <div class="icono fondo-azul"><i class="bi bi-building-gear"></i></div>
+            <h3>Panel administrativo</h3>
+            <p>Gestiona clientes y cuentas, realiza consignaciones y consulta el historial general.</p>
+            <span class="ir">Ingresar como administrador <i class="bi bi-arrow-right"></i></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="container py-4 small" style="color:rgba(255,255,255,.55)">
+      Banco Horizonte es un simulador académico. No maneja dinero real.
+    </footer>
+  </main>
+</body>
+</html>
