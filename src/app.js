@@ -15,6 +15,8 @@ if (!process.env.SESSION_SECRET || process.env.SESSION_SECRET.length < 16) {
 }
 
 app.disable('x-powered-by');
+// Detrás del proxy HTTPS del hosting (Railway, Render...) para que las cookies seguras funcionen
+app.set('trust proxy', 1);
 app.use(express.json({ limit: '20kb' }));
 
 // Cabeceras básicas de seguridad
@@ -33,7 +35,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    secure: 'auto', // solo HTTPS cuando la página se abre por HTTPS
     maxAge: 30 * 60 * 1000, // 30 minutos
   },
   rolling: true, // la sesión se renueva con cada petición; vence tras 30 min sin actividad

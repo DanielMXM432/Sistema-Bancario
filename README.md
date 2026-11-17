@@ -171,6 +171,31 @@ Pedro está bloqueado a propósito, para demostrar que un cliente o cuenta bloqu
 
 > Use una ventana de incógnito o un navegador diferente para tener abiertas a la vez la sesión del cliente y la del administrador, porque comparten la misma cookie de sesión.
 
+## Publicación en Railway (hosting)
+
+El proyecto está preparado para publicarse en [Railway](https://railway.com):
+
+- Lee automáticamente las variables que crea el servicio MySQL de Railway (`MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`).
+- **La primera vez que arranca, si la base de datos no existe, la crea sola** con `database/database.sql` y los datos de prueba (no hace falta ejecutar `db:init` en el servidor).
+- Funciona detrás del proxy HTTPS del hosting (`trust proxy` y cookies seguras automáticas).
+
+Pasos:
+
+1. En Railway: **New Project → Deploy from GitHub repo** y elegir este repositorio.
+2. En el mismo proyecto: **+ Create → Database → MySQL**.
+3. En el servicio de la aplicación, pestaña **Variables**, agregar:
+   ```
+   MYSQLHOST=${{MySQL.MYSQLHOST}}
+   MYSQLPORT=${{MySQL.MYSQLPORT}}
+   MYSQLUSER=${{MySQL.MYSQLUSER}}
+   MYSQLPASSWORD=${{MySQL.MYSQLPASSWORD}}
+   DB_NAME=banco_horizonte
+   SESSION_SECRET=una_cadena_larga_y_aleatoria
+   ```
+4. Pestaña **Settings → Networking → Generate Domain** para obtener la dirección pública.
+
+Para reiniciar los datos de prueba en el hosting, elimine la base `banco_horizonte` desde la pestaña *Data* del servicio MySQL y reinicie la aplicación (**Redeploy**).
+
 ## Estructura del proyecto
 
 ```
@@ -192,6 +217,7 @@ Banco/
 │   ├── server.js             # Punto de entrada
 │   ├── app.js                # Configuración de Express
 │   ├── config/db.js          # Pool MySQL y transacciones
+│   ├── config/inicializar.js # Crea la base desde database.sql
 │   ├── middlewares/auth.js   # Autenticación y roles
 │   ├── routes/               # auth, cliente, admin, cajero
 │   ├── services/operaciones.js  # Consignar, retirar, transferir
