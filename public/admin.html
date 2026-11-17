@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel administrativo | Banco Horizonte</title>
+  <link href="/vendor/fuente/index.css" rel="stylesheet">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+  <div class="topbar-movil admin d-lg-none d-flex justify-content-between align-items-center px-3 py-2">
+    <span class="marca text-white"><span class="marca-logo"><i class="bi bi-sunrise"></i></span>Panel administrativo</span>
+    <button class="btn btn-sm text-white fs-4" data-bs-toggle="offcanvas" data-bs-target="#menu" aria-label="Abrir menú"><i class="bi bi-list"></i></button>
+  </div>
+
+  <div class="app">
+    <nav class="sidebar admin offcanvas-lg offcanvas-start" tabindex="-1" id="menu" aria-label="Menú administrativo">
+      <div class="offcanvas-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <a class="marca fs-5" href="/admin.html"><span class="marca-logo"><i class="bi bi-sunrise"></i></span>
+            <span>Banco Horizonte<small>Panel administrativo</small></span></a>
+          <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#menu" aria-label="Cerrar"></button>
+        </div>
+        <ul class="nav flex-column gap-1">
+          <li><a class="nav-link active" href="#dashboard" data-seccion="dashboard"><i class="bi bi-speedometer2"></i>Dashboard</a></li>
+          <li><a class="nav-link" href="#clientes" data-seccion="clientes"><i class="bi bi-people"></i>Clientes</a></li>
+          <li><a class="nav-link" href="#cuentas" data-seccion="cuentas"><i class="bi bi-wallet2"></i>Cuentas</a></li>
+          <li><a class="nav-link" href="#consignar" data-seccion="consignar"><i class="bi bi-box-arrow-in-down"></i>Consignaciones</a></li>
+          <li><a class="nav-link" href="#movimientos" data-seccion="movimientos"><i class="bi bi-journal-text"></i>Movimientos</a></li>
+        </ul>
+        <div class="usuario-caja">
+          <div class="text-white fw-semibold" id="nombre-usuario">—</div>
+          <div class="mb-2" style="opacity:.7">Administrador</div>
+          <button class="btn btn-sm btn-outline-light w-100" id="btn-salir"><i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión</button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="contenido">
+      <!-- ============ DASHBOARD ============ -->
+      <section class="seccion visible" id="sec-dashboard">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+          <div><h1 class="titulo-seccion">Dashboard</h1><p class="subtitulo-seccion">Estado general del banco en tiempo real.</p></div>
+          <button class="btn btn-outline-secondary btn-sm" data-seccion="dashboard"><i class="bi bi-arrow-clockwise me-1"></i>Actualizar</button>
+        </div>
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-xl-3"><div class="kpi"><div class="icono fondo-azul"><i class="bi bi-people"></i></div>
+            <div class="valor" id="k-clientes">—</div><div class="etiqueta">Clientes registrados</div></div></div>
+          <div class="col-6 col-xl-3"><div class="kpi"><div class="icono fondo-verde"><i class="bi bi-person-check"></i></div>
+            <div class="valor" id="k-activos">—</div><div class="etiqueta">Clientes activos <span class="d-block small" id="k-cuentas-activas"></span></div></div></div>
+          <div class="col-6 col-xl-3"><div class="kpi"><div class="icono fondo-rojo"><i class="bi bi-person-lock"></i></div>
+            <div class="valor" id="k-bloqueados">—</div><div class="etiqueta">Clientes bloqueados <span class="d-block small" id="k-cuentas-bloq"></span></div></div></div>
+          <div class="col-6 col-xl-3"><div class="kpi"><div class="icono fondo-ambar"><i class="bi bi-bank"></i></div>
+            <div class="valor" id="k-saldo">—</div><div class="etiqueta">Suma total de saldos</div></div></div>
+        </div>
+        <div class="row g-3">
+          <div class="col-xl-4">
+            <div class="panel h-100">
+              <div class="panel-titulo"><i class="bi bi-calendar-day"></i> Operaciones de hoy</div>
+              <div class="comprobante"><dl id="k-hoy"></dl></div>
+              <div class="d-grid gap-2 mt-3">
+                <button class="btn btn-primary" data-seccion="consignar"><i class="bi bi-box-arrow-in-down me-1"></i>Nueva consignación</button>
+                <button class="btn btn-outline-primary" id="btn-nuevo-cliente-dash"><i class="bi bi-person-plus me-1"></i>Crear cliente</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8">
+            <div class="panel h-100">
+              <div class="panel-titulo justify-content-between"><span><i class="bi bi-activity"></i> Actividad reciente</span>
+                <a href="#movimientos" class="small text-decoration-none" data-seccion="movimientos">Ver historial</a></div>
+              <div class="table-responsive"><table class="table tabla tabla-movil">
+                <thead><tr><th>Fecha</th><th>Cuenta</th><th>Tipo</th><th class="text-end">Valor</th></tr></thead>
+                <tbody id="tabla-actividad"></tbody></table></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CLIENTES ============ -->
+      <section class="seccion" id="sec-clientes">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+          <div><h1 class="titulo-seccion">Clientes</h1><p class="subtitulo-seccion">Busca, consulta y gestiona los clientes del banco.</p></div>
+          <button class="btn btn-primary" id="btn-nuevo-cliente"><i class="bi bi-person-plus me-1"></i>Crear cliente</button>
+        </div>
+        <div class="panel mb-3">
+          <form class="row g-2" id="form-buscar-clientes">
+            <div class="col-md-7"><div class="input-group"><span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input class="form-control" name="q" placeholder="Nombre, documento, correo o número de cuenta" aria-label="Buscar cliente"></div></div>
+            <div class="col-8 col-md-3"><select class="form-select" name="estado" aria-label="Estado">
+              <option value="">Todos los estados</option><option value="ACTIVO">Activos</option><option value="INACTIVO">Inactivos</option><option value="BLOQUEADO">Bloqueados</option></select></div>
+            <div class="col-4 col-md-2 d-grid"><button class="btn btn-primary">Buscar</button></div>
+          </form>
+        </div>
+        <div class="panel">
+          <div class="table-responsive"><table class="table tabla tabla-movil">
+            <thead><tr><th>Cliente</th><th>Documento</th><th>Contacto</th><th class="text-center">Cuentas</th><th class="text-end">Saldo total</th><th>Estado</th><th></th></tr></thead>
+            <tbody id="tabla-clientes"></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- ============ CUENTAS ============ -->
+      <section class="seccion" id="sec-cuentas">
+        <h1 class="titulo-seccion">Cuentas bancarias</h1>
+        <p class="subtitulo-seccion">Consulta todas las cuentas y su saldo actual.</p>
+        <div class="panel mb-3">
+          <form class="row g-2" id="form-buscar-cuentas">
+            <div class="col-md-6"><div class="input-group"><span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input class="form-control" name="q" placeholder="Número de cuenta, titular o documento" aria-label="Buscar cuenta"></div></div>
+            <div class="col-6 col-md-2"><select class="form-select" name="tipo" aria-label="Tipo"><option value="">Todos los tipos</option><option value="AHORROS">Ahorros</option><option value="CORRIENTE">Corriente</option></select></div>
+            <div class="col-6 col-md-2"><select class="form-select" name="estado" aria-label="Estado"><option value="">Todos los estados</option><option value="ACTIVO">Activas</option><option value="INACTIVO">Inactivas</option><option value="BLOQUEADO">Bloqueadas</option></select></div>
+            <div class="col-md-2 d-grid"><button class="btn btn-primary">Buscar</button></div>
+          </form>
+        </div>
+        <div class="panel">
+          <div class="table-responsive"><table class="table tabla tabla-movil">
+            <thead><tr><th>Cuenta</th><th>Tipo</th><th>Titular</th><th class="text-end">Saldo</th><th>Estado</th><th>Apertura</th><th></th></tr></thead>
+            <tbody id="tabla-cuentas"></tbody>
+            <tfoot><tr><td colspan="3" class="text-end fw-bold sin-label">Total en cuentas listadas</td><td class="text-end fw-bold" id="total-cuentas" data-label="Total">—</td><td colspan="3" class="sin-label"></td></tr></tfoot>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ============ CONSIGNACIONES ============ -->
+      <section class="seccion" id="sec-consignar">
+        <h1 class="titulo-seccion">Consignaciones</h1>
+        <p class="subtitulo-seccion">Registra un depósito en efectivo en cualquier cuenta activa.</p>
+        <div class="row g-4">
+          <div class="col-lg-7">
+            <div class="panel">
+              <form id="form-consignar" novalidate>
+                <div class="mb-3"><label class="form-label" for="cs-cuenta">Número de cuenta</label>
+                  <div class="input-group has-validation">
+                    <input class="form-control mono" id="cs-cuenta" name="numeroCuenta" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="10 dígitos">
+                    <button class="btn btn-outline-primary" type="button" id="btn-buscar-cuenta">Consultar</button>
+                    <div class="invalid-feedback">Ingrese un número de cuenta de 10 dígitos.</div>
+                  </div>
+                  <div id="cs-info" class="mt-2"></div>
+                </div>
+                <div class="mb-3"><label class="form-label" for="cs-valor">Valor a consignar (COP)</label>
+                  <div class="input-group has-validation"><span class="input-group-text">$</span>
+                    <input class="form-control" id="cs-valor" name="valor" type="number" min="1" step="0.01" required placeholder="0">
+                    <div class="invalid-feedback">El valor debe ser mayor que cero.</div></div></div>
+                <div class="mb-3"><label class="form-label" for="cs-desc">Descripción (opcional)</label>
+                  <input class="form-control" id="cs-desc" name="descripcion" maxlength="100" placeholder="Ej. Depósito en efectivo"></div>
+                <div id="cs-mensaje" class="mb-3"></div>
+                <button class="btn btn-primary px-4" type="submit"><i class="bi bi-box-arrow-in-down me-1"></i>Consignar</button>
+              </form>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="panel"><div class="panel-titulo"><i class="bi bi-receipt"></i> Comprobante</div>
+              <div id="cs-comprobante"><div class="vacio"><i class="bi bi-receipt"></i><p>El comprobante aparecerá aquí.</p></div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MOVIMIENTOS ============ -->
+      <section class="seccion" id="sec-movimientos">
+        <h1 class="titulo-seccion">Historial general de movimientos</h1>
+        <p class="subtitulo-seccion">Todas las operaciones registradas en el banco. Los movimientos no se pueden editar ni eliminar.</p>
+        <div class="panel mb-3">
+          <form class="row g-2 align-items-end" id="form-buscar-mov">
+            <div class="col-md-3"><label class="form-label">Cuenta</label><input class="form-control mono" name="cuenta" maxlength="10" placeholder="Número"></div>
+            <div class="col-6 col-md-2"><label class="form-label">Tipo</label><select class="form-select" name="tipo"><option value="">Todos</option>
+              <option value="CONSIGNACION">Consignación</option><option value="RETIRO_CAJERO">Retiro cajero</option>
+              <option value="TRANSFERENCIA_ENVIADA">Transf. enviada</option><option value="TRANSFERENCIA_RECIBIDA">Transf. recibida</option></select></div>
+            <div class="col-6 col-md-2"><label class="form-label">Canal</label><select class="form-select" name="canal"><option value="">Todos</option>
+              <option value="BANCA_VIRTUAL">Banca virtual</option><option value="CAJERO">Cajero</option><option value="OFICINA">Oficina</option></select></div>
+            <div class="col-6 col-md-2"><label class="form-label">Desde</label><input type="date" class="form-control" name="desde"></div>
+            <div class="col-6 col-md-2"><label class="form-label">Hasta</label><input type="date" class="form-control" name="hasta"></div>
+            <div class="col-md-1 d-grid"><button class="btn btn-primary" aria-label="Filtrar"><i class="bi bi-funnel"></i></button></div>
+          </form>
+        </div>
+        <div class="panel">
+          <div class="small text-secondary mb-2" id="mov-resumen"></div>
+          <div class="table-responsive"><table class="table tabla tabla-movil">
+            <thead><tr><th>Fecha</th><th>Cuenta</th><th>Titular</th><th>Tipo</th><th>Descripción</th><th>Canal</th><th class="text-end">Valor</th><th class="text-end">Saldo result.</th></tr></thead>
+            <tbody id="tabla-movimientos"></tbody></table></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: crear cliente -->
+  <div class="modal fade" id="modal-crear" tabindex="-1" aria-labelledby="titulo-crear" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <form class="modal-content" id="form-crear" novalidate>
+        <div class="modal-header"><h2 class="modal-title fs-5 fw-bold" id="titulo-crear">Crear cliente</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div>
+        <div class="modal-body">
+          <h3 class="fs-6 fw-bold text-secondary mb-3">Datos personales</h3>
+          <div class="row g-3 mb-4" data-campos-personales></div>
+          <h3 class="fs-6 fw-bold text-secondary mb-3">Acceso y cuenta</h3>
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label">Contraseña de banca virtual</label>
+              <input class="form-control" name="password" type="text" minlength="8" maxlength="64" pattern="(?=.*[A-Za-z])(?=.*[0-9]).{8,64}" required autocomplete="off">
+              <div class="invalid-feedback">Mínimo 8 caracteres, con letras y números.</div></div>
+            <div class="col-md-6"><label class="form-label">Tipo de cuenta</label>
+              <select class="form-select" name="tipo_cuenta"><option value="AHORROS">Ahorros</option><option value="CORRIENTE">Corriente</option></select></div>
+            <div class="col-md-6"><label class="form-label">PIN del cajero (4 dígitos)</label>
+              <input class="form-control mono" name="pin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required autocomplete="off">
+              <div class="invalid-feedback">El PIN debe tener 4 dígitos.</div></div>
+            <div class="col-md-6"><label class="form-label">Consignación inicial (opcional)</label>
+              <div class="input-group"><span class="input-group-text">$</span><input class="form-control" name="saldo_inicial" type="number" min="0" step="0.01" placeholder="0"></div></div>
+          </div>
+          <div id="crear-mensaje" class="mt-3"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-person-plus me-1"></i>Crear cliente</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: detalle de cliente -->
+  <div class="modal fade" id="modal-detalle" tabindex="-1" aria-labelledby="titulo-detalle" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div><h2 class="modal-title fs-5 fw-bold" id="titulo-detalle">Cliente</h2><div class="small text-secondary" id="detalle-sub"></div></div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="nav nav-tabs mb-3" role="tablist">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-resumen" type="button">Resumen</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-editar" type="button">Editar datos</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-acceso" type="button">Estado y acceso</button></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-resumen">
+              <div class="row g-3">
+                <div class="col-lg-4"><div class="comprobante"><dl id="detalle-datos"></dl></div></div>
+                <div class="col-lg-8">
+                  <div class="panel-titulo"><i class="bi bi-wallet2"></i> Cuentas</div>
+                  <div class="table-responsive mb-3"><table class="table tabla tabla-movil">
+                    <thead><tr><th>Cuenta</th><th>Tipo</th><th class="text-end">Saldo</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody id="detalle-cuentas"></tbody></table></div>
+                  <div class="panel-titulo"><i class="bi bi-clock-history"></i> Últimos movimientos</div>
+                  <div class="table-responsive"><table class="table tabla tabla-movil">
+                    <thead><tr><th>Fecha</th><th>Cuenta</th><th>Tipo</th><th class="text-end">Valor</th><th class="text-end">Saldo</th></tr></thead>
+                    <tbody id="detalle-movimientos"></tbody></table></div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="tab-editar">
+              <form id="form-editar" novalidate>
+                <div class="row g-3" data-campos-personales></div>
+                <div id="editar-mensaje" class="my-3"></div>
+                <button class="btn btn-primary" type="submit"><i class="bi bi-check2 me-1"></i>Guardar cambios</button>
+              </form>
+            </div>
+            <div class="tab-pane fade" id="tab-acceso">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <div class="panel h-100">
+                    <div class="panel-titulo"><i class="bi bi-toggles"></i> Estado del cliente</div>
+                    <p class="small text-secondary">Un cliente bloqueado o inactivo no puede iniciar sesión ni realizar operaciones desde ningún módulo.</p>
+                    <div class="mb-3">Estado actual: <span id="estado-actual"></span></div>
+                    <div class="d-flex flex-wrap gap-2">
+                      <button class="btn btn-success" data-estado="ACTIVO"><i class="bi bi-unlock me-1"></i>Habilitar</button>
+                      <button class="btn btn-outline-secondary" data-estado="INACTIVO"><i class="bi bi-pause-circle me-1"></i>Inactivar</button>
+                      <button class="btn btn-danger" data-estado="BLOQUEADO"><i class="bi bi-lock me-1"></i>Bloquear</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="panel mb-3">
+                    <div class="panel-titulo"><i class="bi bi-key"></i> Restablecer contraseña</div>
+                    <form id="form-reset" class="d-flex gap-2" novalidate>
+                      <input class="form-control" name="password" type="text" placeholder="Nueva contraseña" minlength="8" maxlength="64"
+                             pattern="(?=.*[A-Za-z])(?=.*[0-9]).{8,64}" required autocomplete="off" aria-label="Nueva contraseña">
+                      <button class="btn btn-outline-primary text-nowrap">Restablecer</button>
+                    </form>
+                  </div>
+                  <div class="panel">
+                    <div class="panel-titulo"><i class="bi bi-plus-square"></i> Abrir cuenta adicional</div>
+                    <form id="form-nueva-cuenta" class="row g-2" novalidate>
+                      <div class="col-6"><select class="form-select" name="tipo" aria-label="Tipo de cuenta"><option value="AHORROS">Ahorros</option><option value="CORRIENTE">Corriente</option></select></div>
+                      <div class="col-6"><input class="form-control mono" name="pin" placeholder="PIN (4 dígitos)" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required aria-label="PIN"></div>
+                      <div class="col-12 d-grid"><button class="btn btn-outline-primary">Abrir cuenta</button></div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/comun.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
